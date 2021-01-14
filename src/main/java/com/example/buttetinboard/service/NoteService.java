@@ -36,8 +36,6 @@ public class NoteService {
         Category category = categoryRepository.findByName(noteRequest.getCategoryName())
                 .orElseThrow(() -> new CategoryNotFoundException(noteRequest.getCategoryName()));
         Note note = noteMapper.map(noteRequest, category, authService.getCurrentUser());
-//        note.setCategory(category);
-//        note.setUser(authService.getCurrentUser());
         return noteRepository.save(note);
     }
 

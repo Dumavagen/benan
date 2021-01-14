@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.UniqueElements;
 
 @Data
 @AllArgsConstructor
@@ -14,6 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 public class CategoryDTO {
     private Long id;
     private String name;
-    private String description;
+    private Long parent_id;
     private Integer numberOfNotes;
 }

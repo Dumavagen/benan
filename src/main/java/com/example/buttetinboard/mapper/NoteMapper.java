@@ -21,6 +21,7 @@ public abstract class NoteMapper {
     @Mapping(target = "description", source = "noteRequest.description")
     @Mapping(target = "category", source = "category")
     @Mapping(target = "user", source = "user")
+    @Mapping(target = "noteName", source = "noteRequest.noteName")
     public abstract Note map(NoteRequest noteRequest, Category category, User user);
 
     @Mapping(target = "id", source = "id")

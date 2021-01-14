@@ -21,7 +21,7 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank(message = "Note Name cannot be empty or Null")
-    private String noteTitle;
+    private String noteName;
     @Nullable
     @Lob
     private String description;
