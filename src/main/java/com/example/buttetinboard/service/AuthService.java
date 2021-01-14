@@ -4,7 +4,7 @@ import com.example.buttetinboard.dto.AuthenticationResponse;
 import com.example.buttetinboard.dto.LoginRequest;
 import com.example.buttetinboard.dto.RefreshTokenRequest;
 import com.example.buttetinboard.dto.RegisterRequest;
-import com.example.buttetinboard.exceptions.SpringBenanException;
+import com.example.buttetinboard.exceptions.InvalidTokenException;
 import com.example.buttetinboard.model.NotificationEmail;
 import com.example.buttetinboard.model.User;
 import com.example.buttetinboard.model.VerificationToken;
@@ -58,13 +58,13 @@ public class AuthService {
 
     public void verifyAccount(String token) {
         Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
-        fetchUserAndEnable(verificationToken.orElseThrow(() -> new SpringBenanException("Invalid Token")));
+        fetchUserAndEnable(verificationToken.orElseThrow(() -> new InvalidTokenException("Invalid Token")));
     }
 
     private void fetchUserAndEnable(VerificationToken verificationToken) {
         String username = verificationToken.getUser().getUsername();
         User user = userRepository.findByUsername(username).
-                orElseThrow(() -> new SpringBenanException("User not found with name - " + username));
+                orElseThrow(() -> new UsernameNotFoundException("User not found with name - " + username));
         user.setEnabled(true);
         userRepository.save(user);
     }

@@ -1,6 +1,6 @@
 package com.example.buttetinboard.service;
 
-import com.example.buttetinboard.exceptions.SpringBenanException;
+import com.example.buttetinboard.exceptions.InvalidTokenException;
 import com.example.buttetinboard.model.RefreshToken;
 import com.example.buttetinboard.repository.RefreshTokenRepository;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ public class RefreshTokenService {
 
     public void validateRefreshToken(String token) {
         refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new SpringBenanException("Invalid refresh Token"));
+                .orElseThrow(() -> new InvalidTokenException("Invalid refresh Token"));
     }
 
     public void deleteRefreshToken(String token) {

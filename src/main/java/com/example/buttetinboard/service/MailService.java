@@ -1,6 +1,6 @@
 package com.example.buttetinboard.service;
 
-import com.example.buttetinboard.exceptions.SpringBenanException;
+import com.example.buttetinboard.exceptions.InvalidTokenException;
 import com.example.buttetinboard.model.NotificationEmail;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class MailService {
             mailSender.send(messagePreparator);
             log.info("Activation email sent!!!");
         } catch (MailException e) {
-            throw new SpringBenanException("Exception occurred when sending mail to " + notificationEmail.getRecipient());
+            throw new InvalidTokenException("Exception occurred when sending mail to " + notificationEmail.getRecipient());
         }
     }
 }
