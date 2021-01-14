@@ -26,14 +26,14 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> getAllSubreddits() {
+    public ResponseEntity<List<CategoryDTO>> getAllCategory() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(categoryService.getAll());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<CategoryDTO> getSubreddit(@PathVariable Long id) {
+    public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(categoryService.getCategory(id));
