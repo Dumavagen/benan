@@ -28,11 +28,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/subreddit")
+                .antMatchers(HttpMethod.GET, "/api/category")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/posts/")
+                .antMatchers(HttpMethod.GET, "/api/notes/")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/posts/**")
+                .antMatchers(HttpMethod.GET, "/api/notes/**")
                 .permitAll()
                 .antMatchers("/v2/api-docs",
                         "/configuration/ui",
