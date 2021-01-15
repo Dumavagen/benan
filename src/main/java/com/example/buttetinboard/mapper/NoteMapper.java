@@ -5,16 +5,12 @@ import com.example.buttetinboard.dto.NoteResponse;
 import com.example.buttetinboard.model.Category;
 import com.example.buttetinboard.model.Note;
 import com.example.buttetinboard.model.User;
-import com.example.buttetinboard.service.AuthService;
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
 public abstract class NoteMapper {
-    @Autowired
-    private AuthService authService;
 
     @Mapping(target = "createdDate", expression = "java(java.time.Instant.now())")
     @Mapping(target = "id", source = "noteRequest.id")

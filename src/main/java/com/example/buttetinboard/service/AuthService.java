@@ -6,6 +6,7 @@ import com.example.buttetinboard.dto.RefreshTokenRequest;
 import com.example.buttetinboard.dto.RegisterRequest;
 import com.example.buttetinboard.exceptions.InvalidTokenException;
 import com.example.buttetinboard.model.NotificationEmail;
+import com.example.buttetinboard.model.Profile;
 import com.example.buttetinboard.model.User;
 import com.example.buttetinboard.model.VerificationToken;
 import com.example.buttetinboard.repository.UserRepository;
@@ -35,6 +36,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
+    private final ProfileService profileService;
 
     public void signup(RegisterRequest registerRequest) {
         User user = new User();
@@ -44,7 +46,8 @@ public class AuthService {
         user.setCreated(Instant.now());
         user.setEnabled(false);
 
-        userRepository.save(user);
+        User userForProfile = userRepository.save(user);
+        profileService.save(userForProfile);
 
         String token = generateVerificationToken(user);
         mailService.sendMail(new NotificationEmail(

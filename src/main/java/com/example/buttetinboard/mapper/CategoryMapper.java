@@ -13,7 +13,7 @@ import java.util.List;
 public interface CategoryMapper {
 
     @Mapping(target = "numberOfNotes", expression = "java(mapNotes(category.getNotes()))")
-    CategoryDTO mapCategoryToDto(Category category);
+    CategoryDTO mapToDto(Category category);
 
     default Integer mapNotes(List<Note> numberOfNotes) {
         return numberOfNotes.size();
@@ -21,5 +21,5 @@ public interface CategoryMapper {
 
     @InheritInverseConfiguration
     @Mapping(target = "notes", ignore = true)
-    Category mapDtoToCategory(CategoryDTO categoryDTO);
+    Category map(CategoryDTO categoryDTO);
 }

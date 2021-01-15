@@ -23,7 +23,7 @@ public class CategoryService {
     private final CategoryMapper categoryMapper;
 
     public CategoryDTO save(CategoryDTO categoryDTO) {
-        Category category = categoryMapper.mapDtoToCategory(categoryDTO);
+        Category category = categoryMapper.map(categoryDTO);
         categoryRepository.save(category);
         categoryDTO.setId(category.getId());
         return categoryDTO;
@@ -33,7 +33,7 @@ public class CategoryService {
     public List<CategoryDTO> getAll() {
         return categoryRepository.findAll()
                 .stream()
-                .map(categoryMapper::mapCategoryToDto)
+                .map(categoryMapper::mapToDto)
                 .collect(Collectors.toList());
     }
 
@@ -41,6 +41,6 @@ public class CategoryService {
     public CategoryDTO getCategory(Long id) {
         Category subreddit = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("No category found with id"));
-        return categoryMapper.mapCategoryToDto(subreddit);
+        return categoryMapper.mapToDto(subreddit);
     }
 }

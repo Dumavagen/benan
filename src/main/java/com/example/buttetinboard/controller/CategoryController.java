@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/api/categories")
 @AllArgsConstructor
 @Slf4j
 public class CategoryController {
