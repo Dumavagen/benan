@@ -77,4 +77,14 @@ public class NoteService {
                 .map(noteMapper::mapToDto)
                 .collect(Collectors.toList());
     }
+
+    public Note changeNote(Long id, NoteRequest noteRequest) {
+        Category category = categoryRepository.findByName(noteRequest.getCategoryName())
+                .orElseThrow(() -> new CategoryNotFoundException(noteRequest.getCategoryName()));
+        Note noteFromBD = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Note nou found"));
+        Note note = noteMapper.map(noteRequest, category, authService.getCurrentUser());
+        note.setId(noteFromBD.getId());
+        note.setStatus(Status.MODERATION);
+        return noteRepository.save(note);
+    }
 }

@@ -20,12 +20,12 @@ public class NoteController {
     private final NoteService noteService;
 
     @PostMapping
-    public ResponseEntity createPost(@RequestBody NoteRequest noteRequest) {
+    public ResponseEntity<?> createPost(@RequestBody NoteRequest noteRequest) {
         noteService.save(noteRequest);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<NoteResponse> getNote(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(noteService.getNote(id));
     }
@@ -44,4 +44,11 @@ public class NoteController {
     public ResponseEntity<List<NoteResponse>> getNotesByUsername(@PathVariable String username) {
         return ResponseEntity.status(HttpStatus.OK).body(noteService.getNotesByUsername(username));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> changeNote(@PathVariable Long id, @RequestBody NoteRequest noteRequest) {
+        noteService.changeNote(id, noteRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
