@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -21,7 +22,6 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    @Transactional
     public CategoryDTO save(CategoryDTO categoryDTO) {
         Category category = categoryMapper.mapDtoToCategory(categoryDTO);
         categoryRepository.save(category);
