@@ -1,6 +1,7 @@
 package com.example.buttetinboard.controller;
 
 import com.example.buttetinboard.exceptions.CategoryNotFoundException;
+import com.example.buttetinboard.exceptions.ForbiddenException;
 import com.example.buttetinboard.exceptions.NoteNotFoundException;
 import com.example.buttetinboard.exceptions.InvalidTokenException;
 import org.springframework.http.HttpStatus;
@@ -45,5 +46,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         body.put("message", "Invalid token or user not found");
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<Object> handleForbiddenException(
+            ForbiddenException e, WebRequest request) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", "Forbidden for this operation");
+
+        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
     }
 }

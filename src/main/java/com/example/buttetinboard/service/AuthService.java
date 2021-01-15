@@ -5,10 +5,7 @@ import com.example.buttetinboard.dto.LoginRequest;
 import com.example.buttetinboard.dto.RefreshTokenRequest;
 import com.example.buttetinboard.dto.RegisterRequest;
 import com.example.buttetinboard.exceptions.InvalidTokenException;
-import com.example.buttetinboard.model.NotificationEmail;
-import com.example.buttetinboard.model.Profile;
-import com.example.buttetinboard.model.User;
-import com.example.buttetinboard.model.VerificationToken;
+import com.example.buttetinboard.model.*;
 import com.example.buttetinboard.repository.UserRepository;
 import com.example.buttetinboard.repository.VerificationTokenRepository;
 import com.example.buttetinboard.security.JwtProvider;
@@ -45,6 +42,7 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setCreated(Instant.now());
         user.setEnabled(false);
+        user.setRole(Role.USER);
 
         User userForProfile = userRepository.save(user);
         profileService.save(userForProfile);
@@ -116,5 +114,9 @@ public class AuthService {
                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
                 .username(refreshTokenRequest.getUsername())
                 .build();
+    }
+
+    public boolean isAdmin(User user) {
+        return user.getRole().equals(Role.ADMIN);
     }
 }

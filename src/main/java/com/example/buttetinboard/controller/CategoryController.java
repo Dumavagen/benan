@@ -1,6 +1,9 @@
 package com.example.buttetinboard.controller;
 
 import com.example.buttetinboard.dto.CategoryDTO;
+import com.example.buttetinboard.exceptions.ForbiddenException;
+import com.example.buttetinboard.model.Role;
+import com.example.buttetinboard.model.User;
 import com.example.buttetinboard.service.CategoryService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +23,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO) throws ForbiddenException {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(categoryService.save(categoryDTO));
