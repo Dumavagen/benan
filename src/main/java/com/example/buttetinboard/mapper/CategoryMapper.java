@@ -13,6 +13,7 @@ import java.util.List;
 public interface CategoryMapper {
 
     @Mapping(target = "numberOfNotes", expression = "java(mapNotes(category.getNotes()))")
+    @Mapping(target = "parent_id", source = "category.parent_id")
     CategoryDTO mapToDto(Category category);
 
     default Integer mapNotes(List<Note> numberOfNotes) {

@@ -7,6 +7,7 @@ import com.example.buttetinboard.exceptions.NoteNotFoundException;
 import com.example.buttetinboard.mapper.NoteMapper;
 import com.example.buttetinboard.model.Category;
 import com.example.buttetinboard.model.Note;
+import com.example.buttetinboard.model.Status;
 import com.example.buttetinboard.model.User;
 import com.example.buttetinboard.repository.CategoryRepository;
 import com.example.buttetinboard.repository.NoteRepository;
@@ -36,12 +37,13 @@ public class NoteService {
         Category category = categoryRepository.findByName(noteRequest.getCategoryName())
                 .orElseThrow(() -> new CategoryNotFoundException(noteRequest.getCategoryName()));
         Note note = noteMapper.map(noteRequest, category, authService.getCurrentUser());
+        note.setStatus(Status.MODERATION);
         return noteRepository.save(note);
     }
 
     @Transactional(readOnly = true)
     public NoteResponse getNote(Long id) {
-        Note note = noteRepository.findById(id)
+        Note note = noteRepository.findById(id).filter(n -> !n.getStatus().equals(Status.MODERATION))
                 .orElseThrow(() -> new NoteNotFoundException(id.toString()));
         return noteMapper.mapToDto(note);
     }
@@ -50,6 +52,7 @@ public class NoteService {
     public List<NoteResponse> getAllPosts() {
         return noteRepository.findAll()
                 .stream()
+                .filter(n -> !n.getStatus().equals(Status.MODERATION))
                 .map(noteMapper::mapToDto)
                 .collect(Collectors.toList());
     }
@@ -59,7 +62,9 @@ public class NoteService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id.toString()));
         List<Note> notes = noteRepository.findAllByCategory(category);
-        return notes.stream().map(noteMapper::mapToDto).collect(Collectors.toList());
+        return notes.stream()
+                .filter(n -> !n.getStatus().equals(Status.MODERATION))
+                .map(noteMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -68,6 +73,7 @@ public class NoteService {
                 .orElseThrow(() -> new UsernameNotFoundException(username));
         return noteRepository.findByUser(user)
                 .stream()
+                .filter(n -> !n.getStatus().equals(Status.MODERATION))
                 .map(noteMapper::mapToDto)
                 .collect(Collectors.toList());
     }

@@ -3,7 +3,6 @@ package com.example.buttetinboard.mapper;
 import com.example.buttetinboard.dto.ProfileDTO;
 import com.example.buttetinboard.model.Profile;
 import com.example.buttetinboard.model.User;
-import org.hibernate.annotations.Target;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

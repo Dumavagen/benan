@@ -24,7 +24,7 @@ public class Category {
     @NotBlank(message = "Category name is required")
     @Size(min=6, max=25)
     private String name;
-    private Long parentId;
+    private Long parent_id;
     @OneToMany(fetch = FetchType.LAZY)
     private List<Note> notes;
 }
