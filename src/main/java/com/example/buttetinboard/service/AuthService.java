@@ -90,10 +90,15 @@ public class AuthService {
     @Transactional(readOnly = true)
     public User getCurrentUser() {
         org.springframework.security.core.userdetails
-                .User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder
-                .getContext().getAuthentication().getPrincipal();
+                .User principal;
+        try {
+            principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder
+                    .getContext().getAuthentication().getPrincipal();
+        } catch (ClassCastException e) {
+            return null;
+        }
         return userRepository.findByUsername(principal.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     private String generateVerificationToken(User user) {

@@ -32,7 +32,6 @@ public class CategoryService {
             Category category = categoryMapper.map(categoryDTO);
             categoryRepository.save(category);
             categoryDTO.setId(category.getId());
-            Object details = SecurityContextHolder.getContext().getAuthentication();
             return categoryDTO;
         } else {
             throw new ForbiddenException("You don't have roles for this operation");
