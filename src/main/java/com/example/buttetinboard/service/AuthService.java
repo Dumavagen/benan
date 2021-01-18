@@ -86,6 +86,7 @@ public class AuthService {
                 .build();
     }
 
+
     @Transactional(readOnly = true)
     public User getCurrentUser() {
         org.springframework.security.core.userdetails
@@ -119,4 +120,5 @@ public class AuthService {
     public boolean isAdmin(User user) {
         return user.getRole().equals(Role.ADMIN);
     }
+
 }

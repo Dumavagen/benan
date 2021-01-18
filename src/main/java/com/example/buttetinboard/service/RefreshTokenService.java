@@ -4,6 +4,8 @@ import com.example.buttetinboard.exceptions.InvalidTokenException;
 import com.example.buttetinboard.model.RefreshToken;
 import com.example.buttetinboard.repository.RefreshTokenRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.NullSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

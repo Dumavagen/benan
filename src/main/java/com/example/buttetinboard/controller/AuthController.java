@@ -9,6 +9,7 @@ import com.example.buttetinboard.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,7 +40,7 @@ public class AuthController {
         return authService.login(loginRequest);
     }
 
-    @PostMapping("/refresh/token")
+    @PostMapping("/refresh/tokens")
     public AuthenticationResponse refreshTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         return authService.refreshToken(refreshTokenRequest);
     }
@@ -47,6 +48,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
+        SecurityContextHolder.clearContext();
         return ResponseEntity.status(HttpStatus.OK).body("Refresh Token Deleted Successfully!");
     }
 }

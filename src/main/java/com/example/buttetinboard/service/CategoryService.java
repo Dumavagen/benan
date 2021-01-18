@@ -10,6 +10,7 @@ import com.example.buttetinboard.model.User;
 import com.example.buttetinboard.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,7 @@ public class CategoryService {
             Category category = categoryMapper.map(categoryDTO);
             categoryRepository.save(category);
             categoryDTO.setId(category.getId());
+            Object details = SecurityContextHolder.getContext().getAuthentication();
             return categoryDTO;
         } else {
             throw new ForbiddenException("You don't have roles for this operation");
