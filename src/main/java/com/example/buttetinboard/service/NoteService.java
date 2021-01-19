@@ -43,8 +43,8 @@ public class NoteService {
 
     @Transactional(readOnly = true)
     public NoteResponse getNote(Long id) {
-        Note note = null;
         User user = authService.getCurrentUser();
+        Note note = null;
         if (user == null) {
             note = noteRepository.findById(id)
                     .filter(n -> !n.getStatus().equals(Status.MODERATION))
@@ -58,6 +58,7 @@ public class NoteService {
                     .orElseThrow(() -> new NoteNotFoundException(id.toString()));
         }
         return noteMapper.mapToDto(note);
+
     }
 
     @Transactional(readOnly = true)
@@ -140,6 +141,7 @@ public class NoteService {
     }
 
     public Note changeNote(Long id, NoteRequest noteRequest) {
+        User user = authService.getCurrentUser();
         Category category = categoryRepository.findByName(noteRequest.getCategoryName())
                 .orElseThrow(() -> new CategoryNotFoundException(noteRequest.getCategoryName()));
         Note noteFromBD = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Note not found"));
