@@ -6,15 +6,15 @@ import com.example.buttetinboard.exceptions.CategoryNotFoundException;
 import com.example.buttetinboard.exceptions.ForbiddenException;
 import com.example.buttetinboard.exceptions.NoteNotFoundException;
 import com.example.buttetinboard.mapper.NoteMapper;
-import com.example.buttetinboard.model.Category;
-import com.example.buttetinboard.model.Note;
-import com.example.buttetinboard.model.Status;
-import com.example.buttetinboard.model.User;
+import com.example.buttetinboard.model.*;
 import com.example.buttetinboard.repository.CategoryRepository;
+import com.example.buttetinboard.repository.NoteCriteriaRepository;
 import com.example.buttetinboard.repository.NoteRepository;
 import com.example.buttetinboard.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +33,7 @@ public class NoteService {
     private final UserRepository userRepository;
     private final AuthService authService;
     private final NoteMapper noteMapper;
+    private final NoteCriteriaRepository noteCriteriaRepository;
 
     public Note save(NoteRequest noteRequest) {
         Category category = categoryRepository.findByName(noteRequest.getCategoryName())
@@ -62,29 +63,37 @@ public class NoteService {
 
     }
 
+//    @Transactional(readOnly = true)
+//    public List<NoteResponse> getAllPosts() {
+//        User user = authService.getCurrentUser();
+//        List<NoteResponse> notes = null;
+//        if (user == null) {
+//            notes = noteRepository.findAll()
+//                    .stream()
+//                    .filter(n -> !n.getStatus().equals(Status.MODERATION))
+//                    .map(noteMapper::mapToDto)
+//                    .collect(Collectors.toList());
+//        } else if (authService.isAdmin(user)) {
+//            notes = noteRepository.findAll()
+//                    .stream()
+//                    .map(noteMapper::mapToDto)
+//                    .collect(Collectors.toList());
+//        } else {
+//            notes = noteRepository.findAll()
+//                    .stream()
+//                    .filter(n -> n.getUser().getId().equals(user.getId()) || !n.getStatus().equals(Status.MODERATION))
+//                    .map(noteMapper::mapToDto)
+//                    .collect(Collectors.toList());
+//        }
+//        return notes;
+//    }
+
     @Transactional(readOnly = true)
-    public List<NoteResponse> getAllPosts() {
-        User user = authService.getCurrentUser();
-        List<NoteResponse> notes = null;
-        if (user == null) {
-            notes = noteRepository.findAll()
-                    .stream()
-                    .filter(n -> !n.getStatus().equals(Status.MODERATION))
-                    .map(noteMapper::mapToDto)
-                    .collect(Collectors.toList());
-        } else if (authService.isAdmin(user)) {
-            notes = noteRepository.findAll()
-                    .stream()
-                    .map(noteMapper::mapToDto)
-                    .collect(Collectors.toList());
-        } else {
-            notes = noteRepository.findAll()
-                    .stream()
-                    .filter(n -> n.getUser().getId().equals(user.getId()) || !n.getStatus().equals(Status.MODERATION))
-                    .map(noteMapper::mapToDto)
-                    .collect(Collectors.toList());
-        }
-        return notes;
+    public Page<NoteResponse> getNotes(NotePage notePage,
+                                       NoteSearchCriteria noteSearchCriteria) {
+        Page<Note> notes = noteCriteriaRepository
+                .findByWithFilters(notePage, noteSearchCriteria);
+        return notes.map(noteMapper::mapToDto);
     }
 
     @Transactional(readOnly = true)

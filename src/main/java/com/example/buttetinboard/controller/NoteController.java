@@ -3,13 +3,16 @@ package com.example.buttetinboard.controller;
 import com.example.buttetinboard.dto.NoteRequest;
 import com.example.buttetinboard.dto.NoteResponse;
 import com.example.buttetinboard.exceptions.ForbiddenException;
+import com.example.buttetinboard.model.Note;
+import com.example.buttetinboard.model.NotePage;
+import com.example.buttetinboard.model.NoteSearchCriteria;
 import com.example.buttetinboard.service.NoteService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 
@@ -31,9 +34,15 @@ public class NoteController {
         return ResponseEntity.status(HttpStatus.OK).body(noteService.getNote(id));
     }
 
+//    @GetMapping
+//    public ResponseEntity<List<NoteResponse>> getAllNotes() {
+//        return ResponseEntity.status(HttpStatus.OK).body(noteService.getAllPosts());
+//    }
+
     @GetMapping
-    public ResponseEntity<List<NoteResponse>> getAllNotes() {
-        return ResponseEntity.status(HttpStatus.OK).body(noteService.getAllPosts());
+    public ResponseEntity<Page<NoteResponse>> getAllNotes(NotePage notePage,
+                                                  NoteSearchCriteria noteSearchCriteria) {
+        return ResponseEntity.status(HttpStatus.OK).body(noteService.getNotes(notePage, noteSearchCriteria));
     }
 
     @GetMapping("/by-category/{id}")
