@@ -1,8 +1,6 @@
 package com.example.buttetinboard.dto;
 
-import com.example.buttetinboard.model.User;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
-@Builder
-public class ProfileDTO {
+public class ProfileResponse {
     private Long id;
     private String phoneNumber;
     private String userName;
