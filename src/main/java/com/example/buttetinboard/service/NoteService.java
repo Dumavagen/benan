@@ -3,6 +3,7 @@ package com.example.buttetinboard.service;
 import com.example.buttetinboard.dto.NoteRequest;
 import com.example.buttetinboard.dto.NoteResponse;
 import com.example.buttetinboard.exceptions.CategoryNotFoundException;
+import com.example.buttetinboard.exceptions.ForbiddenException;
 import com.example.buttetinboard.exceptions.NoteNotFoundException;
 import com.example.buttetinboard.mapper.NoteMapper;
 import com.example.buttetinboard.model.Category;
@@ -140,14 +141,19 @@ public class NoteService {
         return notes;
     }
 
-    public Note changeNote(Long id, NoteRequest noteRequest) {
+    public Note changeNote(Long id, NoteRequest noteRequest) throws ForbiddenException {
         User user = authService.getCurrentUser();
+
         Category category = categoryRepository.findByName(noteRequest.getCategoryName())
                 .orElseThrow(() -> new CategoryNotFoundException(noteRequest.getCategoryName()));
         Note noteFromBD = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("Note not found"));
-        Note note = noteMapper.map(noteRequest, category, authService.getCurrentUser());
-        note.setId(noteFromBD.getId());
-        note.setStatus(Status.MODERATION);
-        return noteRepository.save(note);
+        if (user.getId().equals(noteFromBD.getUser().getId())) {
+            Note note = noteMapper.map(noteRequest, category, authService.getCurrentUser());
+            note.setId(noteFromBD.getId());
+            note.setStatus(Status.MODERATION);
+            return noteRepository.save(note);
+        } else {
+            throw new ForbiddenException(id.toString());
+        }
     }
 }

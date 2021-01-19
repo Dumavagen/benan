@@ -2,6 +2,7 @@ package com.example.buttetinboard.controller;
 
 import com.example.buttetinboard.dto.NoteRequest;
 import com.example.buttetinboard.dto.NoteResponse;
+import com.example.buttetinboard.exceptions.ForbiddenException;
 import com.example.buttetinboard.service.NoteService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,7 +47,7 @@ public class NoteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> changeNote(@PathVariable Long id, @RequestBody NoteRequest noteRequest) {
+    public ResponseEntity<?> changeNote(@PathVariable Long id, @RequestBody NoteRequest noteRequest) throws ForbiddenException {
         noteService.changeNote(id, noteRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
